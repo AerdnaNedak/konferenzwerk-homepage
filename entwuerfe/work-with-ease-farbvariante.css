@@ -1,0 +1,77 @@
+/*
+ * Archivierte Farbvariante für die KonferenzWerk-Startseite.
+ * Stand: 13. September 2026
+ *
+ * Diese Datei ist bewusst nicht in die aktive Website eingebunden.
+ * Zur späteren Vorschau nach styles.css laden und dem body zusätzlich
+ * die Klasse "theme-work-with-ease" geben.
+ */
+
+.home-page.theme-work-with-ease {
+  --navy: #252b33;
+  --violet: #dd286c;
+  --periwinkle: #73d8d0;
+  --lime: #73d8d0;
+  --pink: #ed2e78;
+  --brand-green: #138d87;
+  --mist: #e9f3f1;
+  --line: rgba(37, 43, 51, 0.22);
+  --spice: #dd286c;
+  --spice-dark: #252b33;
+  --blaze: #f4518b;
+  --ember: #a91850;
+  --turquoise: #159c96;
+  --ice: #73d8d0;
+  --spice-ink: #252b33;
+  --spice-paper: #fbf4e9;
+  --spice-mist: #e9f3f1;
+  --spice-line: #c7d7d4;
+}
+
+.home-page.theme-work-with-ease .site-header {
+  background: rgba(37, 43, 51, 0.97);
+  border-bottom-color: var(--turquoise);
+}
+
+.home-page.theme-work-with-ease .wordmark .wordmark__werk,
+.home-page.theme-work-with-ease .hero .brand-inline span {
+  color: var(--pink);
+}
+
+.home-page.theme-work-with-ease .hero h1 {
+  color: var(--spice-ink);
+}
+
+.home-page.theme-work-with-ease .hero h1 .ink-pink {
+  color: var(--pink);
+}
+
+.home-page.theme-work-with-ease .method-section {
+  background: var(--spice-ink);
+}
+
+.home-page.theme-work-with-ease .method-step:hover {
+  background: var(--spice-ink);
+}
+
+.home-page.theme-work-with-ease .site-footer {
+  background: var(--spice-ink);
+  border-top-color: var(--turquoise);
+}
+
+.home-page.theme-work-with-ease .site-footer .wordmark .wordmark__werk,
+.home-page.theme-work-with-ease .site-footer .brand-inline span {
+  color: var(--ice);
+}
+
+.home-page.theme-work-with-ease .footer-links a:hover,
+.home-page.theme-work-with-ease .footer-contact a:hover {
+  color: var(--pink);
+}
+
+@media (max-width: 1100px) {
+  .home-page.theme-work-with-ease .site-nav {
+    background: var(--spice-ink);
+    border-color: var(--turquoise);
+  }
+}
