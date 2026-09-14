@@ -1837,6 +1837,47 @@ h3 {
   --spice-line: #cbd8d6;
 }
 
+.home-page .legal {
+  color: var(--spice-ink);
+  background: var(--spice-paper);
+}
+
+.home-page .legal h1,
+.home-page .legal h2,
+.home-page .legal h3 {
+  color: var(--spice-ink);
+}
+
+.home-page .legal .eyebrow {
+  color: var(--spice);
+}
+
+.home-page .legal .button {
+  color: var(--spice-ink);
+  background: var(--blaze);
+  border-color: var(--spice-ink);
+  box-shadow: 5px 5px 0 var(--spice-ink);
+}
+
+@media (hover: hover) {
+  .home-page .legal .button:hover {
+    color: var(--spice-ink);
+    background: var(--ice);
+  }
+}
+
+.error-page .legal .prose {
+  max-width: 900px;
+}
+
+.error-page .legal h1 {
+  margin-bottom: 1rem;
+}
+
+.error-page .legal .lead {
+  margin: 0 0 2rem;
+}
+
 .home-page .spark-strip {
   --strip-bg: var(--turquoise);
   color: var(--spice-ink);

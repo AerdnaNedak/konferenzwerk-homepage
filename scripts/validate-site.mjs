@@ -4,7 +4,14 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const pages = ["index.html", "konferenzentwicklung/index.html", "assistenztage/index.html", "rechtliches/index.html", "impressum/index.html", "datenschutz/index.html", "404.html"];
+const indexablePages = new Set(["index.html", "konferenzentwicklung/index.html", "assistenztage/index.html", "rechtliches/index.html"]);
 const failures = [];
+
+const sitemapXml = readFileSync(resolve(root, "sitemap.xml"), "utf8");
+const sitemapEntries = new Map(
+  [...sitemapXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)]
+    .map((match) => [match[1], match[2]])
+);
 
 const fail = (file, message) => failures.push(`${file}: ${message}`);
 
@@ -79,6 +86,24 @@ for (const page of pages) {
     }
   }
 
+  if (indexablePages.has(page)) {
+    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+    const webPage = nodes.find((node) => node["@type"] === "WebPage" && node.url === canonical);
+    const graphIds = new Set(nodes.map((node) => node["@id"]).filter(Boolean));
+
+    if (!canonical) fail(page, "indexierbare Seite hat keine Canonical-URL");
+    if (/meta name="robots" content="[^"]*noindex/i.test(html)) fail(page, "indexierbare Seite enthält noindex");
+    if (!webPage?.dateModified) fail(page, "WebPage-JSON-LD enthält kein dateModified");
+    if (canonical && !sitemapEntries.has(canonical)) fail(page, `Canonical-URL fehlt in sitemap.xml: ${canonical}`);
+    if (canonical && webPage?.dateModified && sitemapEntries.get(canonical) !== webPage.dateModified) {
+      fail(page, `sitemap.xml lastmod (${sitemapEntries.get(canonical) || "fehlt"}) stimmt nicht mit dateModified (${webPage.dateModified}) überein`);
+    }
+
+    for (const id of ["https://konferenzwerk.com/#website", "https://konferenzwerk.com/#organization", "https://konferenzwerk.com/#andrea"]) {
+      if (!graphIds.has(id)) fail(page, `Entitätsgraph definiert ${id} nicht selbst`);
+    }
+  }
+
   const visibleText = normalize(html
     .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
     .replace(/<style\b[\s\S]*?<\/style>/gi, " "));
@@ -110,4 +135,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Website-Prüfung erfolgreich: ${pages.length} Seiten, Dateiverweise, H1-Struktur, ARIA-Bezüge, JSON-LD, sichtbare FAQ-Inhalte und Social-Bilder sind konsistent.`);
+console.log(`Website-Prüfung erfolgreich: ${pages.length} Seiten, Dateiverweise, H1-Struktur, ARIA-Bezüge, JSON-LD, Entitätsgraphen, Sitemap-Daten, sichtbare FAQ-Inhalte und Social-Bilder sind konsistent.`);

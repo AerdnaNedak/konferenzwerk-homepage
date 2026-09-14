@@ -6,6 +6,7 @@
     <title>Inhouse-Konferenzen, die Funken schlagen | KonferenzWerk</title>
     <meta name="description" content="Andrea Kaden entwickelt zielgruppengenaue Inhouse-Konferenzen: Konzeption, Programm, Speaker-Management, Moderation und digitaler Teilnehmerweg.">
     <link rel="canonical" href="https://konferenzwerk.com/">
+    <link rel="describedby" href="/llms.txt" type="text/markdown">
     <meta name="theme-color" content="#AF3800">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="de_DE">
@@ -21,10 +22,10 @@
     <meta name="twitter:title" content="Inhouse-Konferenzen, die Funken schlagen | KonferenzWerk">
     <meta name="twitter:description" content="Inhouse-Konferenzen mit Zielgruppenverständnis, Dramaturgie und den passenden Menschen auf der Bühne.">
     <meta name="twitter:image" content="https://konferenzwerk.com/assets/images/konferenzwerk-social.jpg">
-    <link rel="icon" href="/assets/logo-light.png" type="image/png">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <link rel="preload" href="/assets/fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="styles.css?v=74">
+    <link rel="stylesheet" href="styles.css?v=75">
     <script defer src="script.js?v=12"></script>
     <script type="application/ld+json">
       {
@@ -63,21 +64,26 @@
             "@type": "Person",
             "@id": "https://konferenzwerk.com/#andrea",
             "name": "Andrea Kaden",
-            "jobTitle": "Konferenzentwicklerin",
-            "url": "https://konferenzwerk.com/#andrea",
+            "jobTitle": ["Gründerin von KonferenzWerk", "Konferenzentwicklerin", "CEO der WORK WITH EASE EOOD"],
+            "url": "https://konferenzwerk.com/",
             "image": "https://konferenzwerk.com/assets/images/andrea-kaden-portrait.jpg",
+            "worksFor": { "@id": "https://konferenzwerk.com/#organization" },
             "sameAs": ["https://www.linkedin.com/in/andreakaden/"]
           },
           {
             "@type": "ProfessionalService",
             "@id": "https://konferenzwerk.com/#organization",
             "name": "KonferenzWerk",
+            "legalName": "WORK WITH EASE EOOD",
             "url": "https://konferenzwerk.com/",
-            "logo": "https://konferenzwerk.com/assets/logo-light.png",
+            "logo": "https://konferenzwerk.com/assets/logo-dark.svg",
             "image": "https://konferenzwerk.com/assets/images/konferenzwerk-social.jpg",
             "email": "team@konferenzwerk.com",
             "telephone": "+4917610335862",
             "founder": { "@id": "https://konferenzwerk.com/#andrea" },
+            "employee": { "@id": "https://konferenzwerk.com/#andrea" },
+            "identifier": "205889057",
+            "vatID": "BG205889057",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "ul. Bor 4",
@@ -232,7 +238,7 @@
 
     <header class="site-header">
       <div class="container nav-wrap">
-        <a class="wordmark" href="./" aria-label="KonferenzWerk Startseite"><img class="brand-mark" src="assets/logo-rust.png" alt="" width="256" height="256"><span class="wordmark__text">Konferenz<span class="wordmark__werk">Werk</span></span></a>
+        <a class="wordmark" href="./" aria-label="KonferenzWerk Startseite"><img class="brand-mark" src="assets/logo-rust.svg" alt="" width="256" height="256"><span class="wordmark__text">Konferenz<span class="wordmark__werk">Werk</span></span></a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="hauptnavigation" aria-label="Menü öffnen"><span></span></button>
         <nav class="site-nav" id="hauptnavigation" aria-label="Hauptnavigation">
           <a href="konferenzentwicklung/">Konferenzentwicklung</a>
@@ -400,7 +406,7 @@
       <section class="section section--mist about-section" id="andrea" aria-labelledby="about-title">
         <div class="container split-photo">
           <div>
-            <p class="eyebrow">Andrea Kaden · Konferenzentwicklerin</p>
+            <p class="eyebrow">Andrea Kaden · Gründerin von KonferenzWerk · Konferenzentwicklerin</p>
             <h2 id="about-title">Ich sehe den ganzen Tag – und die Menschen darin.</h2>
             <p class="lead">Ich habe unzählige Konferenzen erlebt: die inspirierenden, die überraschenden und die, bei denen ein gutes Thema auf der Bühne verpufft ist.</p>
             <p>Heute verbinde ich dieses Erfahrungswissen mit genauer Zielgruppenarbeit. Ich weiß, wann ein Publikum einen neuen Gedanken braucht, wann Beteiligung, wann eine Pause – und welcher Speaker sich wirklich auf die Menschen im Raum einstellen kann.</p>
@@ -457,7 +463,7 @@
 
     <footer class="site-footer">
       <div class="container footer-grid">
-        <div><a class="wordmark" href="./"><img class="brand-mark" src="assets/logo-dark.png" alt="" width="256" height="256"><span class="wordmark__text">Konferenz<span class="wordmark__werk">Werk</span></span></a><p>Inhouse-Konferenzen, die Menschen und Inhalte zusammenbringen.</p></div>
+        <div><a class="wordmark" href="./"><img class="brand-mark" src="assets/logo-dark.svg" alt="" width="256" height="256"><span class="wordmark__text">Konferenz<span class="wordmark__werk">Werk</span></span></a><p>Inhouse-Konferenzen, die Menschen und Inhalte zusammenbringen.</p></div>
         <div class="footer-contact"><a href="mailto:team@konferenzwerk.com">team@konferenzwerk.com</a><a href="tel:+4917610335862">+49 176 10335862</a></div>
         <div class="footer-links"><a href="konferenzentwicklung/">Konferenzentwicklung</a><a href="assistenztage/">Assistenztage</a><a href="rechtliches/#impressum">Impressum</a><a href="rechtliches/#datenschutz">Datenschutz</a></div>
       </div>

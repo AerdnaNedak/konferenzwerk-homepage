@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /entwuerfe/
 
 Sitemap: https://konferenzwerk.com/sitemap.xml
