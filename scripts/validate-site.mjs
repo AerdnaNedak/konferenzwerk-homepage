@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const pages = ["index.html", "assistenztage/index.html", "impressum/index.html", "datenschutz/index.html", "404.html"];
+const pages = ["index.html", "assistenztage/index.html", "rechtliches/index.html", "impressum/index.html", "datenschutz/index.html", "404.html"];
 const failures = [];
 
 const fail = (file, message) => failures.push(`${file}: ${message}`);
