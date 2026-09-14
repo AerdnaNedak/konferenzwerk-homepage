@@ -5268,71 +5268,6 @@ h3 {
   line-height: 1.45;
 }
 
-.conference-reference {
-  background: var(--white);
-}
-
-.conference-reference__frame {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) minmax(230px, 0.45fr);
-  align-items: stretch;
-  padding: 0;
-  overflow: hidden;
-  border: 2px dashed var(--spice-ink);
-  border-radius: 20px;
-  box-shadow: 9px 9px 0 var(--turquoise);
-}
-
-.conference-reference__number {
-  display: grid;
-  min-height: 265px;
-  place-items: center;
-  color: var(--spice-ink);
-  background: var(--ice);
-  border-right: 2px dashed var(--spice-ink);
-  font-size: 4.5rem;
-  font-weight: 680;
-}
-
-.conference-reference__frame > div:nth-child(2) {
-  padding: 2rem clamp(2rem, 4vw, 4rem);
-}
-
-.conference-reference__frame h2 {
-  max-width: none;
-  margin-bottom: 1rem;
-  font-size: clamp(2.3rem, 3.7vw, 3.5rem);
-}
-
-.conference-reference__frame > div:nth-child(2) > p:last-child {
-  max-width: 65ch;
-  margin-bottom: 0;
-}
-
-.conference-reference__quote {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2rem;
-  color: var(--white);
-  background: var(--spice-ink);
-}
-
-.conference-reference__quote span {
-  color: var(--turquoise);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.conference-reference__quote p {
-  margin: 0.5rem 0 0;
-  color: var(--white);
-  font-size: 2.2rem;
-  font-weight: 680;
-}
-
 .conference-faq {
   background: var(--spice-mist);
 }
@@ -5379,17 +5314,6 @@ h3 {
 
   .conference-boundary__columns {
     width: min(100%, 820px);
-  }
-}
-
-@media (max-width: 1050px) {
-  .conference-reference__frame {
-    grid-template-columns: 120px minmax(0, 1fr);
-  }
-
-  .conference-reference__quote {
-    grid-column: 1 / -1;
-    min-height: 135px;
   }
 }
 
@@ -5566,21 +5490,4 @@ h3 {
     margin-bottom: 2rem;
   }
 
-  .conference-reference__frame {
-    display: block;
-    border-radius: 14px;
-    box-shadow: 6px 6px 0 var(--turquoise);
-  }
-
-  .conference-reference__number {
-    min-height: 90px;
-    border-right: 0;
-    border-bottom: 2px dashed var(--spice-ink);
-    font-size: 3.2rem;
-  }
-
-  .conference-reference__frame > div:nth-child(2),
-  .conference-reference__quote {
-    padding: 1.4rem;
-  }
 }
