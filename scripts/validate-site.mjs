@@ -117,6 +117,14 @@ for (const page of pages) {
     }
   }
 
+  for (const video of nodes.filter((node) => node["@type"] === "VideoObject")) {
+    const uploadDate = video.uploadDate || "";
+    const dateTimeWithTimezone = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+    if (!dateTimeWithTimezone.test(uploadDate) || Number.isNaN(Date.parse(uploadDate))) {
+      fail(page, `VideoObject uploadDate ist kein gültiger ISO-Zeitstempel mit Zeitzone: ${uploadDate || "(fehlt)"}`);
+    }
+  }
+
   const imageUrl = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1];
   const declaredWidth = Number(html.match(/<meta property="og:image:width" content="(\d+)"/)?.[1]);
   const declaredHeight = Number(html.match(/<meta property="og:image:height" content="(\d+)"/)?.[1]);
