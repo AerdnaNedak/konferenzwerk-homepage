@@ -2006,22 +2006,7 @@ h3 {
 }
 
 .home-page .hero h1 .hero-title__movement {
-  position: relative;
   color: var(--blaze);
-  z-index: 0;
-}
-
-.home-page .hero h1 .hero-title__movement::after {
-  position: absolute;
-  z-index: -1;
-  right: -0.12em;
-  bottom: -0.05em;
-  left: -0.08em;
-  height: 0.16em;
-  content: "";
-  background: var(--lime);
-  border-radius: 999px;
-  transform: rotate(-0.7deg);
 }
 
 .home-page .hero-copy .lead {
