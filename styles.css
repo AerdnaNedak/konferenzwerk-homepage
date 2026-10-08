@@ -2002,7 +2002,7 @@ h3 {
 }
 
 .home-page .hero h1 .hero-title__expertise {
-  color: #08b9ad;
+  color: var(--turquoise);
 }
 
 .home-page .hero h1 .hero-title__movement {
