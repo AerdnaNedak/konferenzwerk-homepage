@@ -6,7 +6,7 @@ Wir entwickeln mit Andrea Kaden die Homepage von **KonferenzWerk**: zielgruppeng
 
 - Alles liegt in diesem einen Repository `AerdnaNedak/konferenzwerk-homepage`. Es ist **öffentlich**: Jede eingecheckte Datei ist auf GitHub sichtbar, auch wenn sie nicht auf der Website erscheint.
 - Es gibt keinen Build. Das handgeschriebene HTML wird so ausgeliefert, wie es im Repository liegt.
-- GitHub Pages baut `main` aus dem Wurzelverzeichnis (klassischer Jekyll-Build). `_config.yml` schließt `entwuerfe/` und `scripts/` von der Website aus, auf GitHub bleiben sie trotzdem sichtbar.
+- GitHub Pages baut `main` aus dem Wurzelverzeichnis (klassischer Jekyll-Build). `_config.yml` schließt `entwuerfe/`, `scripts/`, `mailsignatur/` sowie `AGENTS.md` und `CLAUDE.md` von der Website aus, auf GitHub bleiben sie trotzdem sichtbar.
 - `konzept/` (Briefings, Fotos, Farbstudien) ist per `.gitignore` privat und wird nicht eingecheckt. Private Ausgangsmaterialien nicht ungeprüft auf die Website oder ins Repository übernehmen.
 
 ## Aufbau
@@ -14,6 +14,7 @@ Wir entwickeln mit Andrea Kaden die Homepage von **KonferenzWerk**: zielgruppeng
 - Seiten: `index.html`, `konferenzentwicklung/`, `assistenztage/`, `rechtliches/` (Impressum und Datenschutz), `404.html`. `impressum/` und `datenschutz/` leiten nur auf `rechtliches/` weiter.
 - Englische Fassung unter `en/`: `en/index.html`, `en/conference-design/`, `en/assistant-days/`, `en/legal/`. Britisches Englisch, Anrede „you“. Die rechtlichen Angaben sind eine Übersetzung, verbindlich ist die deutsche Fassung.
 - Gestaltung und Verhalten in `styles.css` und `script.js`, Bilder, Schriften, Logos und Videos unter `assets/`. Bilder liegen als AVIF, WebP und JPG in mehreren Breiten vor und haben `width`/`height`.
+- Mail-Signaturen (lang und kurz) für Apple Mail unter `mailsignatur/`, Anleitung in der README dort. Bei geänderten Kontaktdaten mit anpassen.
 - Domain in `CNAME`, unbedingt erhalten.
 - Auffindbarkeit: JSON-LD in jeder Seite (gemeinsamer Entitätsgraph mit `#organization` und `#andrea`), `sitemap.xml`, `robots.txt`, `llms.txt`.
 

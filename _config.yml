@@ -1,5 +1,6 @@
 exclude:
   - entwuerfe
   - scripts
+  - mailsignatur
   - AGENTS.md
   - CLAUDE.md
