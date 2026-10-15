@@ -1,6 +1,11 @@
 const menuButton = document.querySelector(".menu-toggle");
 const navigation = document.querySelector(".site-nav");
 
+const english = document.documentElement.lang === "en";
+const menuLabels = english
+  ? { open: "Open menu", close: "Close menu" }
+  : { open: "Menü öffnen", close: "Menü schließen" };
+
 if (menuButton && navigation) {
   const header = menuButton.closest(".site-header");
   const mobileNavigation = window.matchMedia("(max-width: 1100px)");
@@ -9,7 +14,7 @@ if (menuButton && navigation) {
     navigation.classList.remove("is-open");
     document.body.classList.remove("menu-open");
     menuButton.setAttribute("aria-expanded", "false");
-    menuButton.setAttribute("aria-label", "Menü öffnen");
+    menuButton.setAttribute("aria-label", menuLabels.open);
     if (restoreFocus) menuButton.focus();
   };
 
@@ -18,7 +23,7 @@ if (menuButton && navigation) {
     navigation.classList.toggle("is-open", opening);
     document.body.classList.toggle("menu-open", opening);
     menuButton.setAttribute("aria-expanded", String(opening));
-    menuButton.setAttribute("aria-label", opening ? "Menü schließen" : "Menü öffnen");
+    menuButton.setAttribute("aria-label", opening ? menuLabels.close : menuLabels.open);
     if (opening) navigation.querySelector("a")?.focus();
   });
 

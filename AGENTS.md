@@ -12,6 +12,7 @@ Wir entwickeln mit Andrea Kaden die Homepage von **KonferenzWerk**: zielgruppeng
 ## Aufbau
 
 - Seiten: `index.html`, `konferenzentwicklung/`, `assistenztage/`, `rechtliches/` (Impressum und Datenschutz), `404.html`. `impressum/` und `datenschutz/` leiten nur auf `rechtliches/` weiter.
+- Englische Fassung unter `en/`: `en/index.html`, `en/conference-design/`, `en/assistant-days/`, `en/legal/`. Britisches Englisch, Anrede „you“. Die rechtlichen Angaben sind eine Übersetzung, verbindlich ist die deutsche Fassung.
 - Gestaltung und Verhalten in `styles.css` und `script.js`, Bilder, Schriften, Logos und Videos unter `assets/`. Bilder liegen als AVIF, WebP und JPG in mehreren Breiten vor und haben `width`/`height`.
 - Domain in `CNAME`, unbedingt erhalten.
 - Auffindbarkeit: JSON-LD in jeder Seite (gemeinsamer Entitätsgraph mit `#organization` und `#andrea`), `sitemap.xml`, `robots.txt`, `llms.txt`.
@@ -20,6 +21,7 @@ Wir entwickeln mit Andrea Kaden die Homepage von **KonferenzWerk**: zielgruppeng
 
 - Auf Deutsch arbeiten. Offene Inhalte oder Platzhalter nicht durch erfundene Angaben ersetzen.
 - Fakten (Zahlen, Firmendaten, Kontakt, Profile) auf allen Seiten, im JSON-LD und in `llms.txt` gleich halten. Die Person `#andrea` steht in jeder Seite, Änderungen daran überall nachziehen.
+- **Zweisprachig:** Jede inhaltliche Änderung in beiden Sprachen machen. Deutsch ist die Ausgangsfassung. Zu jedem Seitenpaar gehören gegenseitige `hreflang`-Verweise (`de`, `en`, `x-default` = Deutsch) und der Sprachumschalter im Kopf. Neue Seitenpaare in `scripts/validate-site.mjs` unter `translations` eintragen.
 - Bei sichtbaren Inhaltsänderungen `dateModified` der Seite und `lastmod` in `sitemap.xml` auf dasselbe Datum setzen.
 - Vor jedem Commit `node scripts/validate-site.mjs` ausführen. Es prüft Dateiverweise, Überschriften, ARIA, JSON-LD, Entitätsgraph, Sitemap und Social-Bilder.
 - Vorschau lokal, z. B. mit `python3 -m http.server` im Projektverzeichnis.

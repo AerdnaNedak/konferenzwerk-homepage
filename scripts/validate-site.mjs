@@ -3,8 +3,14 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const pages = ["index.html", "konferenzentwicklung/index.html", "assistenztage/index.html", "rechtliches/index.html", "impressum/index.html", "datenschutz/index.html", "404.html"];
-const indexablePages = new Set(["index.html", "konferenzentwicklung/index.html", "assistenztage/index.html", "rechtliches/index.html"]);
+const translations = [
+  ["index.html", "en/index.html"],
+  ["konferenzentwicklung/index.html", "en/conference-design/index.html"],
+  ["assistenztage/index.html", "en/assistant-days/index.html"],
+  ["rechtliches/index.html", "en/legal/index.html"]
+];
+const indexablePages = new Set(translations.flat());
+const pages = [...indexablePages, "impressum/index.html", "datenschutz/index.html", "404.html"];
 const failures = [];
 
 const sitemapXml = readFileSync(resolve(root, "sitemap.xml"), "utf8");
@@ -138,9 +144,25 @@ for (const page of pages) {
   }
 }
 
+const canonicalOf = (page) => readFileSync(resolve(root, page), "utf8").match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+const alternatesOf = (page) => new Map(
+  [...readFileSync(resolve(root, page), "utf8").matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)">/g)]
+    .map((match) => [match[1], match[2]])
+);
+
+for (const [german, english] of translations) {
+  const expected = { de: canonicalOf(german), en: canonicalOf(english), "x-default": canonicalOf(german) };
+  for (const page of [german, english]) {
+    const alternates = alternatesOf(page);
+    for (const [language, url] of Object.entries(expected)) {
+      if (alternates.get(language) !== url) fail(page, `hreflang="${language}" sollte auf ${url} zeigen, gefunden: ${alternates.get(language) || "(fehlt)"}`);
+    }
+  }
+}
+
 if (failures.length) {
   console.error(`Website-Prüfung fehlgeschlagen:\n- ${failures.join("\n- ")}`);
   process.exit(1);
 }
 
-console.log(`Website-Prüfung erfolgreich: ${pages.length} Seiten, Dateiverweise, H1-Struktur, ARIA-Bezüge, JSON-LD, Entitätsgraphen, Sitemap-Daten, sichtbare FAQ-Inhalte und Social-Bilder sind konsistent.`);
+console.log(`Website-Prüfung erfolgreich: ${pages.length} Seiten, Dateiverweise, H1-Struktur, ARIA-Bezüge, JSON-LD, Entitätsgraphen, Sitemap-Daten, Sprachversionen, sichtbare FAQ-Inhalte und Social-Bilder sind konsistent.`);
