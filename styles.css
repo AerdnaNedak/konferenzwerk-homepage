@@ -1408,6 +1408,8 @@ h3 {
   margin-top: 0.35rem;
   font-size: clamp(2.35rem, 4vw, 3.6rem);
   line-height: 1;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .legal-content h3 {
