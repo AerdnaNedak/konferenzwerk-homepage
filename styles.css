@@ -2794,8 +2794,8 @@ h3 {
 .home-page .entry-section h3 {
   max-width: 18ch;
   color: var(--spice-ink);
-  font-size: clamp(1.8rem, 3.5vw, 3rem);
-  line-height: 1.04;
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  line-height: 1.06;
 }
 
 .home-page .entry-section__action {
@@ -2813,6 +2813,139 @@ h3 {
   .home-page .entry-section .for-whom article:hover {
     box-shadow: 13px 13px 0 var(--spice);
     transform: rotate(0deg) translate(-3px, -3px);
+  }
+}
+
+/* Formate: drei Anlässe und das erprobte Referenzformat; Einstiege in drei Rollen */
+.home-page .formats-section {
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+  color: var(--spice-ink);
+  background: var(--spice-mist);
+  border-bottom: 2px solid var(--spice-ink);
+}
+
+.home-page .formats-section .section-intro {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.home-page .formats-section .eyebrow {
+  color: var(--spice);
+}
+
+.home-page .formats-section h2 {
+  color: var(--spice-ink);
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  line-height: 1;
+}
+
+.home-page .formats-section .section-intro > p {
+  max-width: 40ch;
+  color: var(--spice-dark);
+}
+
+.formats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.format-card {
+  display: flex;
+  min-width: 0;
+  padding: clamp(1.5rem, 2.5vw, 2rem);
+  flex-direction: column;
+  gap: 0.8rem;
+  color: var(--spice-ink);
+  background: var(--white);
+  border: 2px solid var(--spice-ink);
+  border-radius: 18px;
+}
+
+.format-card .mini-label {
+  color: var(--spice);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.format-card h3 {
+  margin: 0;
+  color: var(--spice-ink);
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  line-height: 1.1;
+  hyphens: manual;
+}
+
+.format-card p {
+  margin: 0;
+}
+
+.format-card--proof {
+  text-decoration: none;
+  background: var(--turquoise);
+  box-shadow: 8px 8px 0 var(--spice);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.format-card__count {
+  font-size: clamp(3.5rem, 5vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.09em;
+  line-height: 0.8;
+}
+
+.format-card__link {
+  display: inline-flex;
+  margin-top: auto;
+  padding: 0.6rem 0.9rem;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--blaze);
+  border: 2px solid var(--spice-ink);
+  border-radius: 999px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (hover: hover) {
+  .format-card--proof:hover {
+    box-shadow: 12px 12px 0 var(--spice);
+    transform: translate(-3px, -3px);
+  }
+}
+
+.home-page .entry-section .for-whom {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-page .entry-section .for-whom article:nth-child(3) {
+  background: var(--white);
+  box-shadow: 9px 9px 0 var(--spice);
+  transform: rotate(-0.4deg);
+}
+
+@media (max-width: 1100px) {
+  .formats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .home-page .entry-section .for-whom {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .entry-section .for-whom article,
+  .home-page .entry-section .for-whom article:nth-child(even) {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .formats {
+    grid-template-columns: 1fr;
   }
 }
 
