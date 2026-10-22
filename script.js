@@ -52,6 +52,14 @@ if (menuButton && navigation) {
       firstElement.focus();
     }
   });
+
+  mobileNavigation.addEventListener("change", () => {
+    if (!mobileNavigation.matches) closeMenu();
+  });
+
+  // Ohne erfolgreich initialisierte Steuerung bleiben die Navigationslinks sichtbar.
+  closeMenu();
+  header?.classList.add("menu-ready");
 }
 
 document.querySelectorAll("[data-current-year]").forEach((element) => {

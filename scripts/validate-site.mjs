@@ -1,8 +1,9 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const siteOrigin = "https://konferenzwerk.com";
 const translations = [
   ["index.html", "en/index.html"],
   ["konferenzentwicklung/index.html", "en/conference-design/index.html"],
@@ -12,6 +13,9 @@ const translations = [
 const indexablePages = new Set(translations.flat());
 const pages = [...indexablePages, "impressum/index.html", "datenschutz/index.html", "404.html"];
 const failures = [];
+const titles = new Map();
+const entityFacts = new Map();
+const pageDocuments = new Map();
 
 const sitemapXml = readFileSync(resolve(root, "sitemap.xml"), "utf8");
 const sitemapEntries = new Map(
@@ -35,6 +39,82 @@ const normalize = (value) => decodeEntities(value)
   .replace(/<[^>]+>/g, " ")
   .replace(/\s+/g, " ")
   .trim();
+
+// Markup-Beispiele in Skripten, Styles und Kommentaren sind keine HTML-Elemente.
+const elementMarkup = (html) => html
+  .replace(/<!--[\s\S]*?-->/g, "")
+  .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
+
+const attributeValues = (markup, attribute) => [...markup.matchAll(/<[a-z][^>]*>/gi)]
+  .flatMap(([tag]) => [...tag.matchAll(new RegExp(`\\s${attribute}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "gi"))]
+    .map((match) => decodeEntities(match[1] ?? match[2] ?? match[3])));
+
+const documentOf = (file) => {
+  if (!pageDocuments.has(file)) {
+    const html = readFileSync(file, "utf8");
+    const markup = elementMarkup(html);
+    const idValues = attributeValues(markup, "id");
+    const anchorNames = attributeValues((markup.match(/<a\b[^>]*>/gi) || []).join(""), "name");
+    pageDocuments.set(file, { html, markup, idValues, ids: new Set(idValues), anchors: new Set([...idValues, ...anchorNames]) });
+  }
+  return pageDocuments.get(file);
+};
+
+const checkFragment = (page, reference) => {
+  let url;
+  try {
+    url = new URL(reference, `${siteOrigin}/${page.replace(/index\.html$/, "")}`);
+  } catch {
+    return; // Lokale Dateipfade prüft weiterhin die vorhandene Dateiverweis-Prüfung.
+  }
+  if (url.origin !== siteOrigin || !url.hash) return;
+
+  // Textfragmente brauchen keine Element-ID, ein davor stehendes Sprungziel schon.
+  const encodedFragment = url.hash.slice(1).split(":~:text=", 1)[0];
+  if (!encodedFragment) return;
+  let fragment;
+  let file;
+  try {
+    fragment = decodeURIComponent(encodedFragment);
+    file = resolve(root, `.${decodeURIComponent(url.pathname)}`);
+  } catch {
+    fail(page, `interner Sprunglink enthält eine ungültige URL-Kodierung: ${reference}`);
+    return;
+  }
+  if (existsSync(file) && statSync(file).isDirectory()) file = resolve(file, "index.html");
+  if (!existsSync(file)) {
+    fail(page, `Zielseite des internen Sprunglinks fehlt: ${reference}`);
+  } else if (/\.html?$/i.test(file)) {
+    const target = documentOf(file);
+    if (!target.anchors.has(fragment) && fragment.toLowerCase() !== "top") {
+      fail(page, `internes Sprungziel fehlt: ${reference} (#${fragment})`);
+    }
+  }
+};
+
+// Diese JSON-LD-Listen beschreiben Fakten ohne festgelegte Reihenfolge.
+const orderedFacts = (value) => {
+  if (Array.isArray(value)) return value.map(orderedFacts).sort((a, b) => String(JSON.stringify(a)).localeCompare(String(JSON.stringify(b))));
+  if (value && typeof value === "object") return Object.fromEntries(Object.keys(value).sort().map((key) => [key, orderedFacts(value[key])]));
+  return value;
+};
+
+const asArray = (value) => value == null ? [] : Array.isArray(value) ? value : [value];
+
+const compareEntityFacts = (page, entity, fields, group) => {
+  if (!entity) return;
+  for (const field of fields) {
+    const value = field === "languageCodes"
+      ? asArray(entity.knowsLanguage).map((language) => language?.alternateName ?? language)
+      : entity[field];
+    const key = `${entity["@id"]}|${group}|${field}`;
+    const fact = JSON.stringify(orderedFacts(value));
+    if (!entityFacts.has(key)) entityFacts.set(key, { page, fact });
+    else if (entityFacts.get(key).fact !== fact) {
+      fail(page, `Entitätsangabe ${entity["@id"]} ${field} weicht von ${entityFacts.get(key).page} ab (${group})`);
+    }
+  }
+};
 
 const localPath = (page, reference) => {
   const clean = reference.split(/[?#]/, 1)[0];
@@ -60,11 +140,13 @@ const jpegSize = (file) => {
 };
 
 for (const page of pages) {
-  const html = readFileSync(resolve(root, page), "utf8");
+  const { html, markup, idValues, ids } = documentOf(resolve(root, page));
   const h1Count = (html.match(/<h1\b/gi) || []).length;
   if (h1Count !== 1) fail(page, `erwartet genau eine H1, gefunden: ${h1Count}`);
 
-  const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]));
+  const repeatedIds = new Set(idValues.filter((id, index) => idValues.indexOf(id) !== index));
+  for (const id of repeatedIds) fail(page, `ID ist mehrfach vorhanden: #${id}`);
+  for (const reference of attributeValues(markup, "href")) checkFragment(page, reference);
   for (const match of html.matchAll(/<section\b([^>]*)>/g)) {
     const label = match[1].match(/aria-labelledby="([^"]+)"/)?.[1];
     if (!label) fail(page, "ein <section>-Bereich hat kein aria-labelledby");
@@ -93,6 +175,16 @@ for (const page of pages) {
   }
 
   if (indexablePages.has(page)) {
+    const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] || "";
+    const pageTitles = [...elementMarkup(head).matchAll(/<title\b[^>]*>([\s\S]*?)<\/title>/gi)];
+    const title = normalize(pageTitles[0]?.[1] || "");
+    if (pageTitles.length !== 1 || !title) fail(page, "indexierbare Seite benötigt genau einen nichtleeren Seitentitel");
+    if (title) {
+      const key = title.toLocaleLowerCase("de");
+      if (titles.has(key)) fail(page, `Seitentitel ist identisch mit ${titles.get(key)}: ${title}`);
+      else titles.set(key, page);
+    }
+
     const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
     const webPage = nodes.find((node) => node["@type"] === "WebPage" && node.url === canonical);
     const graphIds = new Set(nodes.map((node) => node["@id"]).filter(Boolean));
@@ -107,6 +199,20 @@ for (const page of pages) {
 
     for (const id of ["https://konferenzwerk.com/#website", "https://konferenzwerk.com/#organization", "https://konferenzwerk.com/#andrea"]) {
       if (!graphIds.has(id)) fail(page, `Entitätsgraph definiert ${id} nicht selbst`);
+    }
+
+    const person = nodes.find((node) => node["@id"] === `${siteOrigin}/#andrea`);
+    const organization = nodes.find((node) => node["@id"] === `${siteOrigin}/#organization`);
+    const language = html.match(/<html\b[^>]*\blang="([^"]+)"/i)?.[1];
+    compareEntityFacts(page, person, ["@type", "name", "url", "image", "worksFor", "sameAs", "languageCodes"], "sprachneutral");
+    compareEntityFacts(page, organization, ["@type", "name", "legalName", "url", "logo", "image", "email", "telephone", "founder", "employee", "identifier", "vatID", "address", "sameAs"], "sprachneutral");
+    if (language) {
+      compareEntityFacts(page, person, ["jobTitle", "description", "knowsAbout", "knowsLanguage"], language);
+      compareEntityFacts(page, organization, ["description", "knowsAbout", "areaServed"], language);
+    }
+    const personProfiles = new Set(asArray(person?.sameAs));
+    for (const profile of asArray(organization?.sameAs)) {
+      if (personProfiles.has(profile)) fail(page, `sameAs ordnet dieselbe Identität Person und Organisation zu: ${profile}`);
     }
   }
 
@@ -165,4 +271,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Website-Prüfung erfolgreich: ${pages.length} Seiten, Dateiverweise, H1-Struktur, ARIA-Bezüge, JSON-LD, Entitätsgraphen, Sitemap-Daten, Sprachversionen, sichtbare FAQ-Inhalte und Social-Bilder sind konsistent.`);
+console.log(`Website-Prüfung erfolgreich: ${pages.length} Seiten, eindeutige Seitentitel und IDs, Dateiverweise und Sprungziele, H1-Struktur, ARIA-Bezüge, JSON-LD, gemeinsame Entitätsangaben, Sitemap-Daten, Sprachversionen, sichtbare FAQ-Inhalte und Social-Bilder sind konsistent.`);
