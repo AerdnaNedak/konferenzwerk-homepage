@@ -5665,3 +5665,27 @@ h3 {
   }
 
 }
+
+/* Startseite: benannte Stimme aus der Praxis */
+.voice-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.voice-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.voice-layout .voice-card {
+  grid-column: auto;
+  grid-row: auto;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .voice-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
